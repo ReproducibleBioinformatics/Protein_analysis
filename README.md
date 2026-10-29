@@ -23,6 +23,6 @@ Stop JupyterLab with `Ctrl+C` in the launcher window. To use a port other than 8
 
 `ghcr.io/reproduciblebioinformatics/protein_analysis`, built automatically by GitHub Actions from `docker/Dockerfile`.
 
-- R 4.5.1 (rocker/r-ver, pinned CRAN snapshot), Bioconductor 3.21
+- R 4.5.1 (rocker/r-ver, pinned CRAN snapshot), Bioconductor 3.22
 - R packages: edgeR, readxl, ggplot2, pheatmap, IRkernel
 - JupyterLab 4.4.5 in a separate Python environment, not exposed as a kernel

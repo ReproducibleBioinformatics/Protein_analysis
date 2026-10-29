@@ -2,7 +2,7 @@
 FROM rocker/r-ver:4.5.1
 
 ARG JUPYTERLAB_VERSION=4.4.5
-ARG BIOC_VERSION=3.21
+ARG BIOC_VERSION=3.22
 
 # Python only for JupyterLab, in its own venv (never used for the analysis)
 RUN apt-get update \
