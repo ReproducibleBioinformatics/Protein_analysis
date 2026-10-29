@@ -7,8 +7,8 @@ ARG BIOC_VERSION=3.22
 # Python only for JupyterLab, in its own venv (never used for the analysis)
 RUN apt-get update \
  && apt-get install -y --no-install-recommends python3 python3-venv \
-      libxml2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev \
- && rm -rf /var/lib/apt/lists/*
+      libxml2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libzmq3-dev \
+      && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m venv /opt/jupyter \
  && /opt/jupyter/bin/pip install --no-cache-dir "jupyterlab==${JUPYTERLAB_VERSION}" \
