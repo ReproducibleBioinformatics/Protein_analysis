@@ -1,0 +1,5 @@
+# Input data from the facility must never be pushed to GitHub
+data/*
+!data/.gitkeep
+
+.ipynb_checkpoints/
