@@ -1,14 +1,23 @@
-# Standalone JupyterLab + R environment for protein spectral-count analysis
+# Standalone JupyterLab + R environment for label-free proteomics analysis (DEP workflow)
 FROM rocker/r-ver:4.5.1
 
 ARG JUPYTERLAB_VERSION=4.4.5
 ARG BIOC_VERSION=3.22
 
-# Python only for JupyterLab, in its own venv (never used for the analysis)
+# System libraries:
+#  - python3/venv: JupyterLab only (separate venv, never used for the analysis)
+#  - libzmq3-dev: IRkernel (pbdZMQ)
+#  - libnetcdf-dev: mzR (dependency of DEP via MSnbase)
+#  - the rest: compilers and libraries needed when R packages are built from source (arm64)
 RUN apt-get update \
- && apt-get install -y --no-install-recommends python3 python3-venv \
-      libxml2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libzmq3-dev \
-      && rm -rf /var/lib/apt/lists/*
+ && apt-get install -y --no-install-recommends \
+      python3 python3-venv \
+      gfortran cmake \
+      libzmq3-dev libnetcdf-dev \
+      libxml2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev liblzma-dev \
+      libpng-dev libjpeg-dev libtiff-dev libcairo2-dev \
+      libfontconfig1-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev \
+ && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m venv /opt/jupyter \
  && /opt/jupyter/bin/pip install --no-cache-dir "jupyterlab==${JUPYTERLAB_VERSION}" \
@@ -16,10 +25,10 @@ RUN python3 -m venv /opt/jupyter \
 
 COPY jupyter_server_config.py /opt/jupyter/etc/jupyter/jupyter_server_config.py
 
-# R packages for the analysis (CRAN snapshot is pinned by rocker/r-ver)
+# R packages (CRAN snapshot pinned by rocker/r-ver, Bioconductor release pinned above)
 RUN R -q -e 'install.packages(c("IRkernel", "readxl", "ggplot2", "pheatmap", "BiocManager"))' \
- && R -q -e 'BiocManager::install("edgeR", version = Sys.getenv("BIOC_VERSION"), update = FALSE, ask = FALSE)' \
- && R -q -e 'pkgs <- c("IRkernel", "readxl", "ggplot2", "pheatmap", "edgeR"); missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]; if (length(missing)) { message("Missing packages: ", paste(missing, collapse = ", ")); quit(status = 1) }'
+ && R -q -e 'BiocManager::install(c("DEP", "edgeR"), version = Sys.getenv("BIOC_VERSION"), update = FALSE, ask = FALSE)' \
+ && R -q -e 'pkgs <- c("IRkernel", "readxl", "ggplot2", "pheatmap", "DEP", "edgeR", "limma"); missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]; if (length(missing)) { message("Missing packages: ", paste(missing, collapse = ", ")); quit(status = 1) }'
 
 # Register R as a kernel inside the JupyterLab venv
 RUN PATH=/opt/jupyter/bin:$PATH R -q -e 'IRkernel::installspec(user = FALSE, prefix = "/opt/jupyter", displayname = "R 4.5.1")'

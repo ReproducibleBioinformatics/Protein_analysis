@@ -1,6 +1,6 @@
 # Protein_analysis
 
-Reproducible analysis of protein spectral counts (merge of per-sample Excel files, normalization, PCA, hierarchical clustering, differential expression).
+Reproducible analysis of label-free proteomics data (Proteome Discoverer exports): merge of per-sample Excel files, then the standard DEP workflow (filtering, vsn normalization, imputation, limma differential expression, PCA, clustering, volcano plots).
 
 ## Requirements
 
@@ -24,5 +24,5 @@ Stop JupyterLab with `Ctrl+C` in the launcher window. To use a port other than 8
 `ghcr.io/reproduciblebioinformatics/protein_analysis`, built automatically by GitHub Actions from `docker/Dockerfile`.
 
 - R 4.5.1 (rocker/r-ver, pinned CRAN snapshot), Bioconductor 3.22
-- R packages: edgeR, readxl, ggplot2, pheatmap, IRkernel
+- R packages: DEP, limma, edgeR, readxl, ggplot2, pheatmap, IRkernel
 - JupyterLab 4.4.5 in a separate Python environment, not exposed as a kernel
