@@ -8,12 +8,13 @@ ARG BIOC_VERSION=3.22
 #  - python3/venv: JupyterLab only (separate venv, never used for the analysis)
 #  - libzmq3-dev: IRkernel (pbdZMQ)
 #  - libnetcdf-dev: mzR (dependency of DEP via MSnbase)
+#  - libglpk-dev, libgmp-dev: igraph (dependency of DEP via QFeatures)
 #  - the rest: compilers and libraries needed when R packages are built from source (arm64)
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       python3 python3-venv \
       gfortran cmake \
-      libzmq3-dev libnetcdf-dev \
+      libzmq3-dev libnetcdf-dev libglpk-dev libgmp-dev \
       libxml2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev libbz2-dev liblzma-dev \
       libpng-dev libjpeg-dev libtiff-dev libcairo2-dev \
       libfontconfig1-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev \
